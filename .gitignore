@@ -1,4 +1,3 @@
-*.iml
 .gradle
 /local.properties
 /.idea/workspace.xml
@@ -6,3 +5,15 @@
 .DS_Store
 /build
 /captures
+**/local.properties
+**/.DS_Store
+**/bin/
+**/gen/
+**/out/
+gradle/
+**/*.iml
+.idea/
+.DS_Store
+bin/
+
+app/BuglyUploadLog.txt
