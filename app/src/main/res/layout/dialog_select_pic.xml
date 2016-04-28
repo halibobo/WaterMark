@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="280dp"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="#0000"
+    android:windowIsFloating="true" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/shape_select_pic"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:id="@+id/tv_take_photo"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:text="相机拍摄"
+            android:textSize="18sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#CCCCCC"/>
+        <TextView
+            android:id="@+id/tv_phone_pic"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:text="手机相册"
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
+</LinearLayout>
