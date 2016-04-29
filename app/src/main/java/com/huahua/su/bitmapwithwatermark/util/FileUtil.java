@@ -157,6 +157,7 @@ public class FileUtil {
     }
 
     public  Bitmap getImage(String srcPath, int width, int height) {
+        Log.v("getImage","width = " + width+" height = "+height);
         BitmapFactory.Options newOpts = new BitmapFactory.Options();
         //开始读入图片，此时把options.inJustDecodeBounds 设回true了
         newOpts.inJustDecodeBounds = true;
@@ -175,6 +176,7 @@ public class FileUtil {
         if (be <= 0) {
             be = 1;
         }
+        Log.v("getImage","be = " + be);
         newOpts.inSampleSize = be;//设置缩放比例
         //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
         bitmap = BitmapFactory.decodeFile(srcPath, newOpts);
@@ -186,11 +188,10 @@ public class FileUtil {
         }
     }
 
-    public boolean saveMyBitmap(Bitmap bmp){
+    public boolean saveMyBitmap(Bitmap bmp,String name){
         if (!isExitSDCard()) {
             return false;
         }
-        String name = String.valueOf(new Date().getTime());
         FileOutputStream outputStream = null;
         try {
             outputStream = new FileOutputStream(new File(getImageFile(name)));

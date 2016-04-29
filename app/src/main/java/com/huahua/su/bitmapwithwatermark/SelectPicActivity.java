@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -98,6 +99,7 @@ public class SelectPicActivity extends Activity implements View.OnClickListener{
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                 intent.putExtra(FILE_PATH, file.getAbsoluteFile());
                 startActivityForResult(intent, SELECT_PIC_BY_TACK_PHOTO);
+                Log.v("tag", "filepath = " + file.getAbsoluteFile());
             } catch (Exception e) {
                 Toast.makeText(this, getString(R.string.no_camera_power), Toast.LENGTH_SHORT).show();
             }
@@ -153,6 +155,7 @@ public class SelectPicActivity extends Activity implements View.OnClickListener{
                 Toast.makeText(this, getString(R.string.chose_imagefile_error), Toast.LENGTH_LONG).show();
                 return;
             }
+            Log.v("tag", "photoUri = " + photoUri);
         }
 
         String[] pojo = {MediaStore.Images.Media.DATA};
@@ -174,6 +177,7 @@ public class SelectPicActivity extends Activity implements View.OnClickListener{
             Intent lastIntent = getIntent();
             lastIntent.putExtra(KEY_PHOTO_PATH, picPath);
             setResult(Activity.RESULT_OK, lastIntent);
+            Log.v("tag", "picPath = " + picPath);
             finish();
         } else {
             Toast.makeText(this, getString(R.string.chose_imagefile_error), Toast.LENGTH_LONG).show();

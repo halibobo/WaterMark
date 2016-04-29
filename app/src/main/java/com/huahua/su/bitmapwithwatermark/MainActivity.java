@@ -10,12 +10,15 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.huahua.su.bitmapwithwatermark.util.FileUtil;
+
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,13 +55,14 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, R.string.no_choosed_pic, Toast.LENGTH_SHORT).show();
                     return;
                 }
+                Toast.makeText(this,"pic = "+picPath, Toast.LENGTH_SHORT).show();
                 Bitmap bm = null;
                 try {
                      bm = FileUtil.getInstance().getImage(picPath,imageView.getWidth(),imageView.getHeight()); //获取限定宽高的bitmap，不限定则容易占用内存过大及OOM
                     if (bm == null) {
                         Toast.makeText(this, R.string.no_choosed_pic, Toast.LENGTH_SHORT).show();
                     }else{
-                        if (addWatermarkBitmap(bm, editText.getText().toString())) {
+                        if (addWatermarkBitmap(bm, editText.getText().toString(), imageView.getWidth(), imageView.getHeight())) {
                             Toast.makeText(this, "水印生成成功，文件已保存在 " + FileUtil.getInstance().IMAGE_PATH, Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -73,9 +77,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private boolean addWatermarkBitmap(Bitmap bitmap,String str) {
-        int destWidth = bitmap.getWidth();   //此处的bitmap已经限定好宽高
-        int destHeight = bitmap.getHeight();
+    private boolean addWatermarkBitmap(Bitmap bitmap,String str,int w,int h) {
+        int destWidth = w;   //此处的bitmap已经限定好宽高
+        int destHeight = h;
+        Log.v("tag","width = " + destWidth+" height = "+destHeight);
+
         Bitmap icon = Bitmap.createBitmap(destWidth, destHeight, Bitmap.Config.ARGB_8888); //定好宽高的全彩bitmap
         Canvas canvas = new Canvas(icon);//初始化画布绘制的图像到icon上
 
@@ -101,7 +107,9 @@ public class MainActivity extends AppCompatActivity {
         canvas.drawText(str, destWidth/2, destHeight-45, textPaint);//绘制上去字，开始未知x,y采用那只笔绘制
         canvas.save(Canvas.ALL_SAVE_FLAG);
         canvas.restore();
+        bitmap.recycle();
         imageView.setImageBitmap(icon);
-        return FileUtil.getInstance().saveMyBitmap(icon); //保存至文件
+        return FileUtil.getInstance().saveMyBitmap(icon,String.valueOf(new Date().getTime())); //保存至文件
+//        return true;
     }
 }
