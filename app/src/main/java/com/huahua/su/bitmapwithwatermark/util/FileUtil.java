@@ -2,7 +2,13 @@ package com.huahua.su.bitmapwithwatermark.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 
@@ -156,6 +162,7 @@ public class FileUtil {
         return BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
     }
 
+
     public  Bitmap getImage(String srcPath, int width, int height) {
         Log.v("getImage","width = " + width+" height = "+height);
         BitmapFactory.Options newOpts = new BitmapFactory.Options();
@@ -186,6 +193,45 @@ public class FileUtil {
         } else {
             return null;
         }
+    }
+
+    private   boolean saveMyBitmap(Bitmap bitmap,String name ,String... str) {
+        int destWidth = bitmap.getWidth();   //此处的bitmap已经限定好宽高
+        int destHeight = bitmap.getHeight();
+        Log.v("addWatermarkBitmap","width = " + destWidth+" height = "+destHeight);
+        Bitmap icon = Bitmap.createBitmap(destWidth, destHeight, Bitmap.Config.ARGB_8888); //定好宽高的全彩bitmap
+        Canvas canvas = new Canvas(icon);//初始化画布绘制的图像到icon上
+
+        Paint photoPaint = new Paint(); //建立画笔
+        photoPaint.setDither(true); //获取跟清晰的图像采样
+        photoPaint.setFilterBitmap(true);//过滤一些
+
+        Rect src = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());//创建一个指定的新矩形的坐标
+        Rect dst = new Rect(0, 0, destWidth, destHeight);//创建一个指定的新矩形的坐标
+        canvas.drawBitmap(bitmap, src, dst, photoPaint);//将photo 缩放或则扩大到 dst使用的填充区photoPaint
+
+        Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG);//设置画笔
+        textPaint.setTextSize(destWidth/30);//字体大小
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        textPaint.setTypeface(Typeface.DEFAULT_BOLD);//采用默认的宽度
+        textPaint.setAntiAlias(true);  //抗锯齿
+        textPaint.setStrokeWidth(1);
+        textPaint.setAlpha(115);
+        textPaint.setStyle(Paint.Style.STROKE); //空心
+        textPaint.setColor(Color.WHITE);//采用的颜色
+        textPaint.setShadowLayer(1f, 0f, 1f, Color.LTGRAY);
+        int i = 0;
+        for (String s : str) {
+            if(!TextUtils.isEmpty(s)) {
+                i++;
+                canvas.drawText(s, destWidth / 2, destHeight - 45 * i, textPaint);//绘制上去字，开始未知x,y采用那只笔绘制
+            }
+        }
+        canvas.save(Canvas.ALL_SAVE_FLAG);
+        canvas.restore();
+        bitmap.recycle();
+        return saveMyBitmap(icon,name); //保存至文件
+//        return true;
     }
 
     public boolean saveMyBitmap(Bitmap bmp,String name){
